@@ -663,5 +663,83 @@ DELETE localhost:3000/sightings/7
             "created_at": "2023-01-20T19:09:18.854Z",
             "updated_at": "2023-01-20T19:17:59.825Z"
         }
-        
+###
+    - $ git status
+    - $ git add .
+    - $ git commit -m "Completed Story 2"
+    - $ git push origin sighting-crud-actions 
+    - $ git checkout main
+    - $ git pull
+###
+    Story 3: In order to see the wildlife sightings, as a user of the API, I need to run reports on animal sightings.
+
+- $ git checkout -b animal-sightings-reports
+
+    Acceptance Criteria
+
+# Can see one animal with all its associated sightings
+Hint: Checkout this example on how to include associated records
+-app/controller/animal_controller
+```ruby
+    def show
+        animal = Animal.find_by(id: params[:id])
+        render json: animal.sightings
+    end 
+```
+- Postman
+GET localhost:3000/animals/1
+    - output: 
+        [
+            {
+                "id": 1,
+                "animal_id": 1,
+                "latitude": "21.4691° N",
+                "longitude": "78.6569° W",
+                "date": "2021-07-04",
+                "created_at": "2023-01-20T18:19:41.188Z",
+                "updated_at": "2023-01-20T18:19:41.188Z"
+            }
+        ]
+
+# Can see all the all sightings during a given time period
+Hint: Your controller can use a range to look like this:
+class SightingsController < ApplicationController
+  def index
+    sightings = Sighting.where(date: params[:start_date]..params[:end_date])
+    render json: sightings
+  end
+end
+Hint: Be sure to add the start_date and end_date to what is permitted in your strong parameters method
+Hint: Utilize the params section in Postman to ease the developer experience
+Hint: Routes with params
+
+```ruby
+    def index
+        sightings = Sighting.where(date: params[:start_date]..params[:end_date])
+        render json: sightings
+    end
+    private
+    def sighting_params
+        params.require(:sighting).permit(:start_date, :end_date,:animal_id, :latitude, :longitude, :date)
+    end
+```
+
+- Postman
+localhost:3000/sightings?start_date=2022-01-02&end_date=2022-05-20
+    - params -> enter start_date in key
+    -> enter date in value
+    -> enter end_date in another key
+    -> enter date in corresponding value
+    - output: 
+        [
+            {
+                "id": 2,
+                "animal_id": 2,
+                "latitude": "34.0479° N",
+                "longitude": "100.6197° E",
+                "date": "2022-01-02",
+                "created_at": "2023-01-20T18:21:03.388Z",
+                "updated_at": "2023-01-20T18:21:03.388Z"
+            }
+        ]
 ###
