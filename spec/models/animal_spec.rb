@@ -14,8 +14,7 @@ RSpec.describe Animal, type: :model do
     expect(froggy.errors[:scientific_binomial]).to_not be_empty
   end
   it 'common_name and scientific_binomial can not be the same' do
-    froggy = Animal.create(common_name: 'Red-Eyed Tree Frog', scientific_binomial: 'Red-Eyed Tree Frog')
-    expect(froggy.errors[:common_name])
+    froggy = Animal.create(common_name: 'Red-Eyed Tree Frog', scientific_binomial: 'Red-Eyed Tree Frog').to_not be_empty
   end
 end
  
